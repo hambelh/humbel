@@ -41,10 +41,10 @@
       position: absolute;
       top: 0;
       right: 0;
-      width: 40px;
-      height: 40px;
-      background-color: #f5f5f5;
-      z-index: 2;
+      width: 90px; /* wider than before */
+      height: 50px; /* taller than before */
+      background-color: transparent;
+      z-index: 5;
     }
     .download {
       margin-bottom: 20px;
@@ -84,15 +84,12 @@
   <script>
     const params = new URLSearchParams(window.location.search);
     const fileId = params.get('id');
-    const viewer = document.getElementById('pdfViewer');
-    const downloadLink = document.getElementById('downloadLink');
-
     if (fileId) {
-      viewer.src = `https://drive.google.com/file/d/${fileId}/preview`;
-      downloadLink.href = `https://drive.google.com/uc?export=download&id=${fileId}`;
+      document.getElementById('pdfViewer').src = `https://drive.google.com/file/d/${fileId}/preview`;
+      document.getElementById('downloadLink').href = `https://drive.google.com/uc?export=download&id=${fileId}`;
     } else {
-      viewer.outerHTML = '<p style="color: red">Aucun fichier PDF spécifié.</p>';
-      downloadLink.style.display = 'none';
+      document.getElementById('pdfViewer').outerHTML = '<p style="color: red">Aucun fichier PDF spécifié.</p>';
+      document.getElementById('downloadLink').style.display = 'none';
     }
   </script>
 </body>
