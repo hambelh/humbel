@@ -22,7 +22,7 @@
     h1 {
       font-family: "Times New Roman", Times, serif;
       font-size: 24px;
-      margin: 16px auto;
+      margin: 16px auto 8px auto;
     }
 
     .desc {
@@ -34,27 +34,17 @@
       max-width: 1200px;
     }
 
+    .desc a {
+      color: #007BFF;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
     #pdf-container {
       flex-grow: 1;
       overflow: auto;
       background-color: white;
       width: 100%;
-    }
-
-    .download {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin: 10px 0;
-    }
-
-    .download a {
-      text-decoration: none;
-      padding: 10px 20px;
-      background-color: #007BFF;
-      color: white;
-      border-radius: 4px;
-      font-weight: bold;
     }
 
     canvas {
@@ -66,13 +56,8 @@
 <body>
   <h1>Compte rendu d'analyses médicales</h1>
   <div class="desc">
-    <span>Vous pouvez télécharger ce document en cliquant sur télécharger</span>
-    <span style="direction: rtl;">يمكنك تحميل هذا الملف بالنقر على تحميل</span>
-  </div>
-
-  <div class="download">
-    <a id="downloadFr" target="_blank">Télécharger</a>
-    <a id="downloadAr" target="_blank">تحميل</a>
+    <span>Vous pouvez télécharger ce document en cliquant sur <a id="downloadFr" target="_blank">télécharger</a></span>
+    <span style="direction: rtl;">يمكنك تحميل هذا الملف بالنقر على <a id="downloadAr" target="_blank">تحميل</a></span>
   </div>
 
   <div id="pdf-container" class="pdfViewer"></div>
