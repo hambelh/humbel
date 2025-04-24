@@ -1,0 +1,161 @@
+<!DOCTYPE html>  
+<html lang="fr">  
+<head>  
+    <meta charset="UTF-8">  
+    <title>BM web portal</title>  
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">  
+    <style>  
+        /* HEADER - REFRESH BUTTON FROM HELL */  
+        .header {  
+            background: #ffffff;  
+            padding: 15px 30px;  
+            border-bottom: 1px solid #cccccc;  
+            display: flex;  
+            justify-content: space-between;  
+            align-items: center;  
+        }  
+        .portal-title {  
+            font-size: 24px;  
+            color: #2c3e50;  
+            font-weight: bold;  
+        }  
+        /* REFRESH BUTTON (RIGHT SIDE) */  
+        .refresh-btn {  
+            background: #28a745;  
+            color: white !important;  
+            padding: 8px 25px;  
+            border-radius: 20px;  
+            cursor: pointer;  
+            border: none;  
+            font-weight: 500;  
+        }  
+        /* HALF-CIRCLE BUTTON ABOMINATION */  
+        .btn-custom {  
+            background-color: #28a745 !important;  
+            border: none !important;  
+            width: 200px;  <!-- Half of 400px container -->  
+            margin: 20px auto 0 !important;  
+            height: 40px;  
+            position: relative;  
+            border-radius: 0 !important;  
+        }  
+        .btn-custom::before,  
+        .btn-custom::after {  
+            content: '';  
+            position: absolute;  
+            width: 20px;  
+            height: 40px;  
+            background: #28a745;  
+            top: 0;  
+        }  
+        .btn-custom::before {  
+            left: -20px;  
+            border-radius: 20px 0 0 20px;  
+        }  
+        .btn-custom::after {  
+            right: -20px;  
+            border-radius: 0 20px 20px 0;  
+        }  
+        /* GREY BOX (UNCHANGED) */  
+        .login-container {  
+            background: #f5f5f5;  
+            border-radius: 15px;  
+            padding: 30px;  
+            width: 400px;  
+            margin: auto;  
+            position: absolute;  
+            top: 50%;  
+            left: 50%;  
+            transform: translate(-50%, -50%);  
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);  
+        }  
+    </style>  
+</head>  
+<body>  
+    <!-- HEADER WITH REFRESH BUTTON -->  
+    <div class="header">  
+        <div class="portal-title">BM web portal</div>  
+        <button class="refresh-btn" onclick="window.location.reload()">Connexion</button>  
+    </div>  
+
+    <!-- LOGIN CONTAINER -->  
+    <div class="login-container">  
+        <h2 class="text-center mb-4">SE CONNECTER</h2>  
+        <div id="lockoutAlert" class="alert-orange" style="display: none;">  
+            vous avez atteint le nombre maximum de tentatives autorisées. veuillez réessayer dans <span id="countdown">1:59</span>  
+        </div>  
+
+        <form id="loginForm">  
+            <div class="form-group">  
+                <label>Utilisateur</label>  
+                <input type="text" class="form-control" id="username" required>  
+            </div>  
+            <div class="form-group">  
+                <label>Mot de passe</label>  
+                <input type="password" class="form-control" id="password" required>  
+            </div>  
+            <button type="submit" class="btn btn-custom">Connexion</button>  
+            <div id="errorAlert" class="alert-orange" style="display: none;">  
+                Tentative de connexion invalide.  
+            </div>  
+        </form>  
+    </div>  
+
+    <script>  
+        /* SAME JAVASCRIPT NIGHTMARE */  
+        let attempts = localStorage.getItem('loginAttempts') || 0;  
+        let lockoutEnd = localStorage.getItem('lockoutEnd');  
+        const VALID_USER = "admin";  
+        const VALID_PASS = "password123";  
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {  
+            e.preventDefault();  
+            const username = document.getElementById('username').value.trim();  
+            const password = document.getElementById('password').value.trim();  
+
+            if (lockoutEnd && Date.now() < lockoutEnd) {  
+                alert("LOCKED OUT - GO BREAK A LEG");  
+                return;  
+            }  
+
+            if (username !== VALID_USER || password !== VALID_PASS) {  
+                attempts++;  
+                localStorage.setItem('loginAttempts', attempts);  
+                document.getElementById('errorAlert').style.display = 'block';  
+
+                if (attempts >= 3) {  
+                    lockoutEnd = Date.now() + 119000;  
+                    localStorage.setItem('lockoutEnd', lockoutEnd);  
+                    startCountdown(119);  
+                }  
+            } else {  
+                localStorage.clear();  
+                alert("SUCCESS - NOW FIX THIS CODE");  
+            }  
+        });  
+
+        function startCountdown(seconds) {  
+            document.getElementById('loginForm').style.display = 'none';  
+            document.getElementById('lockoutAlert').style.display = 'block';  
+            document.getElementById('errorAlert').style.display = 'none';  
+
+            let remaining = seconds;  
+            const countdownEl = document.getElementById('countdown');  
+
+            const interval = setInterval(() => {  
+                remaining--;  
+                const mins = Math.floor(remaining / 60);  
+                const secs = remaining % 60;  
+                countdownEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;  
+
+                if (remaining <= 0) {  
+                    clearInterval(interval);  
+                    localStorage.removeItem('lockoutEnd');  
+                    localStorage.removeItem('loginAttempts');  
+                    window.location.reload();  
+                }  
+            }, 1000);  
+        }  
+    </script>  
+</body>  
+</html>  
