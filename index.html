@@ -5,7 +5,7 @@
     <title>BM web portal</title>  
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">  
     <style>  
-        /* HEADER - REFRESH BUTTON FROM HELL */  
+        /* HEADER - REFRESH BUTTON  */  
         .header {  
             background: #ffffff;  
             padding: 15px 30px;  
@@ -82,7 +82,7 @@
     <div class="login-container">  
         <h2 class="text-center mb-4">SE CONNECTER</h2>  
         <div id="lockoutAlert" class="alert-orange" style="display: none;">  
-            vous avez atteint le nombre maximum de tentatives autorisées. veuillez réessayer dans <span id="countdown">1:59</span>  
+            vous avez atteint le nombre maximal de tentatives autorisées. veuillez réessayer dans <span id="countdown">1:59</span>  
         </div>  
 
         <form id="loginForm">  
@@ -105,8 +105,8 @@
         /* SAME JAVASCRIPT NIGHTMARE */  
         let attempts = localStorage.getItem('loginAttempts') || 0;  
         let lockoutEnd = localStorage.getItem('lockoutEnd');  
-        const VALID_USER = "admin";  
-        const VALID_PASS = "password123";  
+        const VALID_USER = "*****";  
+        const VALID_PASS = "******************";  
 
         document.getElementById('loginForm').addEventListener('submit', (e) => {  
             e.preventDefault();  
@@ -114,7 +114,7 @@
             const password = document.getElementById('password').value.trim();  
 
             if (lockoutEnd && Date.now() < lockoutEnd) {  
-                alert("LOCKED OUT - GO BREAK A LEG");  
+                alert("LOCKED OUT - Please try again later");  
                 return;  
             }  
 
@@ -130,7 +130,7 @@
                 }  
             } else {  
                 localStorage.clear();  
-                alert("SUCCESS - NOW FIX THIS CODE");  
+                alert("LOCKED OUT - Please try again later");  
             }  
         });  
 
